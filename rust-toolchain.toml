@@ -1,0 +1,4 @@
+# Nightly Rust is required because polars-plan's `nightly` Cargo feature
+# enables upstream `#![feature(...)]` gates used by Python polars 1.40 plans.
+[toolchain]
+channel = "nightly"

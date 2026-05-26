@@ -1,0 +1,155 @@
+[package]
+name = "polars_source_utils"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "polars_source_utils"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.28", features = ["extension-module"] }
+polars-buffer = { git = "https://github.com/pola-rs/polars.git", tag = "py-1.40.0" }
+polars-utils = { git = "https://github.com/pola-rs/polars.git", tag = "py-1.40.0" }
+
+# polars-plan feature set
+# =======================
+# Python polars wheels are built with a broad feature surface. This crate
+# deserializes binary LazyFrame plans emitted by those wheels, so it must enable
+# matching DslPlan / FunctionExpr / DataType serde variants. Otherwise plan
+# source inspection fails with `unknown variant '...'` for valid Python plans.
+polars-plan = { git = "https://github.com/pola-rs/polars.git", tag = "py-1.40.0", features = [
+    # ---- Core: serde + scan/sink IO formats ---------------------------------
+    "serde",
+    "parquet",
+    "ipc",
+    "csv",
+    "json",
+    "scan_lines",
+    "hive_partitions",
+
+    # ---- Compile flavor -----------------------------------------------------
+    "nightly",
+    "chunked_ids",
+    "cse",
+    "debugging",
+    "dot_diagram",
+    "future",
+
+    # ---- Expression namespaces ---------------------------------------------
+    "strings",
+    "temporal",
+    "regex",
+    "binary_encoding",
+    "string_encoding",
+    "concat_str",
+    "string_pad",
+    "string_normalize",
+    "string_reverse",
+    "string_to_integer",
+    "extract_groups",
+    "extract_jsonpath",
+    "list_count",
+    "list_drop_nulls",
+    "list_filter",
+    "list_gather",
+    "list_sample",
+    "list_sets",
+    "list_to_struct",
+    "array_count",
+    "array_to_struct",
+
+    # ---- Random / sampling --------------------------------------------------
+    "random",
+
+    # ---- FFI plugins --------------------------------------------------------
+    "ffi_plugin",
+
+    # ---- Predicates & comparisons ------------------------------------------
+    "is_in",
+    "is_between",
+    "is_close",
+    "is_first_distinct",
+    "is_last_distinct",
+    "is_unique",
+    "arg_where",
+
+    # ---- Numeric / math -----------------------------------------------------
+    "round_series",
+    "abs",
+    "log",
+    "trigonometry",
+    "sign",
+    "true_div",
+    "bitwise",
+
+    # ---- Windowing / rolling / sequence-over-time --------------------------
+    "rolling_window",
+    "rolling_window_by",
+    "rank",
+    "diff",
+    "pct_change",
+    "moment",
+    "ewma",
+    "ewma_by",
+    "interpolate",
+    "interpolate_by",
+    "cum_agg",
+    "mode",
+    "approx_unique",
+    "unique_counts",
+    "top_k",
+    "search_sorted",
+    "merge_sorted",
+    "replace",
+    "find_many",
+    "repeat_by",
+
+    # ---- Joins --------------------------------------------------------------
+    "asof_join",
+    "iejoin",
+    "cross_join",
+    "semi_anti_join",
+
+    # ---- Domain-specific ops ------------------------------------------------
+    "business",
+    "range",
+    "coalesce",
+    "fused",
+    "rle",
+    "cutqcut",
+    "row_hash",
+    "reinterpret",
+    "propagate_nans",
+    "hist",
+    "cov",
+    "peaks",
+    "index_of",
+    "month_start",
+    "month_end",
+    "offset_by",
+    "timezones",
+    "dynamic_group_by",
+    "pivot",
+    "meta",
+    "fmt",
+    "object",
+
+    # ---- Datatypes referenced by serialized plans from Python polars --------
+    "dtype-categorical",
+    "dtype-datetime",
+    "dtype-date",
+    "dtype-time",
+    "dtype-duration",
+    "dtype-decimal",
+    "dtype-array",
+    "dtype-struct",
+    "dtype-extension",
+    "dtype-i8",
+    "dtype-i16",
+    "dtype-i128",
+    "dtype-u8",
+    "dtype-u16",
+    "dtype-u128",
+    "dtype-f16",
+] }
